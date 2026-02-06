@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProtectedRoute from '../../../components/ProtectedRoute';
 import { authService } from '../../../services/authService';
@@ -8,7 +8,7 @@ import { supabase } from '../../../utils/supabase';
 import QRCode from 'qrcode';
 import styles from '../../../styles/Orders.module.css';
 
-export default function OrdersPage() {
+function OrdersPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isCheckout = searchParams.get('checkout') === 'true';
@@ -310,5 +310,19 @@ export default function OrdersPage() {
         </div>
       </div>
     </ProtectedRoute>
+  );
+}
+
+export default function OrdersPage() {
+  return (
+    <Suspense fallback={
+      <ProtectedRoute requiredRole="student">
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+          <div className="loading"></div>
+        </div>
+      </ProtectedRoute>
+    }>
+      <OrdersPageContent />
+    </Suspense>
   );
 }
