@@ -16,6 +16,8 @@ export default function Scanner() {
   const html5QrCodeRef = useRef(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     // Dynamically import html5-qrcode only on client side
     if (typeof window !== 'undefined' && scanning) {
       import('html5-qrcode').then((module) => {
@@ -39,30 +41,31 @@ export default function Scanner() {
             qrCodeSuccessCallback
           )
           .then(() => {
-            setScannerRunning(true);
+            if (isMounted) {
+              setScannerRunning(true);
+            }
           })
           .catch((err) => {
             console.error('Error starting scanner:', err);
-            setError('Failed to start camera. Please check permissions.');
-            setScanning(false);
+            if (isMounted) {
+              setError('Failed to start camera. Please check permissions.');
+              setScanning(false);
+            }
           });
       });
     }
 
     return () => {
+      isMounted = false;
       if (html5QrCodeRef.current && scannerRunning) {
         html5QrCodeRef.current
           .stop()
-          .then(() => {
-            setScannerRunning(false);
-          })
           .catch((err) => {
             console.log('Scanner cleanup error (safe to ignore):', err);
-            setScannerRunning(false);
           });
       }
     };
-  }, [scanning]);
+  }, [scanning, scannerRunning]);
 
   const startScanning = () => {
     setScanning(true);
@@ -73,16 +76,12 @@ export default function Scanner() {
 
   const stopScanning = () => {
     if (html5QrCodeRef.current && scannerRunning) {
+      setScannerRunning(false);
+      setScanning(false);
       html5QrCodeRef.current
         .stop()
-        .then(() => {
-          setScannerRunning(false);
-          setScanning(false);
-        })
         .catch((err) => {
           console.log('Stop scanner error (safe to ignore):', err);
-          setScannerRunning(false);
-          setScanning(false);
         });
     } else {
       setScanning(false);
