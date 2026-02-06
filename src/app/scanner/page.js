@@ -7,6 +7,7 @@ import styles from '../../styles/Scanner.module.css';
 
 export default function Scanner() {
   const [scanning, setScanning] = useState(false);
+  const [scannerRunning, setScannerRunning] = useState(false);
   const [scannedOrder, setScannedOrder] = useState(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -37,6 +38,9 @@ export default function Scanner() {
             config,
             qrCodeSuccessCallback
           )
+          .then(() => {
+            setScannerRunning(true);
+          })
           .catch((err) => {
             console.error('Error starting scanner:', err);
             setError('Failed to start camera. Please check permissions.');
@@ -46,8 +50,16 @@ export default function Scanner() {
     }
 
     return () => {
-      if (html5QrCodeRef.current && scanning) {
-        html5QrCodeRef.current.stop().catch(console.error);
+      if (html5QrCodeRef.current && scannerRunning) {
+        html5QrCodeRef.current
+          .stop()
+          .then(() => {
+            setScannerRunning(false);
+          })
+          .catch((err) => {
+            console.log('Scanner cleanup error (safe to ignore):', err);
+            setScannerRunning(false);
+          });
       }
     };
   }, [scanning]);
@@ -60,10 +72,22 @@ export default function Scanner() {
   };
 
   const stopScanning = () => {
-    if (html5QrCodeRef.current) {
-      html5QrCodeRef.current.stop().catch(console.error);
+    if (html5QrCodeRef.current && scannerRunning) {
+      html5QrCodeRef.current
+        .stop()
+        .then(() => {
+          setScannerRunning(false);
+          setScanning(false);
+        })
+        .catch((err) => {
+          console.log('Stop scanner error (safe to ignore):', err);
+          setScannerRunning(false);
+          setScanning(false);
+        });
+    } else {
+      setScanning(false);
+      setScannerRunning(false);
     }
-    setScanning(false);
   };
 
   const handleScan = async (data) => {
