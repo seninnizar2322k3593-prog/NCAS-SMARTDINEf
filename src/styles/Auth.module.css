@@ -1,0 +1,85 @@
+.authContainer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem 1rem;
+}
+
+.authCard {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  overflow: hidden;
+}
+
+.authHeader {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.authHeader h1 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.authHeader p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+}
+
+.authForm {
+  padding: 2rem;
+}
+
+.authForm h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.authFooter {
+  margin-top: 1.5rem;
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.authFooter p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.authLink {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.authLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .authContainer {
+    padding: 1rem 0.5rem;
+  }
+
+  .authCard {
+    max-width: 100%;
+  }
+
+  .authHeader h1 {
+    font-size: 1.5rem;
+  }
+
+  .authForm {
+    padding: 1.5rem;
+  }
+}
