@@ -7,6 +7,7 @@ import styles from '../../styles/Scanner.module.css';
 
 export default function Scanner() {
   const [scanning, setScanning] = useState(false);
+  const [scannerRunning, setScannerRunning] = useState(false);
   const [scannedOrder, setScannedOrder] = useState(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -15,6 +16,8 @@ export default function Scanner() {
   const html5QrCodeRef = useRef(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     // Dynamically import html5-qrcode only on client side
     if (typeof window !== 'undefined' && scanning) {
       import('html5-qrcode').then((module) => {
@@ -37,20 +40,32 @@ export default function Scanner() {
             config,
             qrCodeSuccessCallback
           )
+          .then(() => {
+            if (isMounted) {
+              setScannerRunning(true);
+            }
+          })
           .catch((err) => {
             console.error('Error starting scanner:', err);
-            setError('Failed to start camera. Please check permissions.');
-            setScanning(false);
+            if (isMounted) {
+              setError('Failed to start camera. Please check permissions.');
+              setScanning(false);
+            }
           });
       });
     }
 
     return () => {
-      if (html5QrCodeRef.current && scanning) {
-        html5QrCodeRef.current.stop().catch(console.error);
+      isMounted = false;
+      if (html5QrCodeRef.current && scannerRunning) {
+        html5QrCodeRef.current
+          .stop()
+          .catch((err) => {
+            console.log('Scanner cleanup error (safe to ignore):', err);
+          });
       }
     };
-  }, [scanning]);
+  }, [scanning, scannerRunning]);
 
   const startScanning = () => {
     setScanning(true);
@@ -60,10 +75,18 @@ export default function Scanner() {
   };
 
   const stopScanning = () => {
-    if (html5QrCodeRef.current) {
-      html5QrCodeRef.current.stop().catch(console.error);
+    if (html5QrCodeRef.current && scannerRunning) {
+      setScannerRunning(false);
+      setScanning(false);
+      html5QrCodeRef.current
+        .stop()
+        .catch((err) => {
+          console.log('Stop scanner error (safe to ignore):', err);
+        });
+    } else {
+      setScanning(false);
+      setScannerRunning(false);
     }
-    setScanning(false);
   };
 
   const handleScan = async (data) => {
