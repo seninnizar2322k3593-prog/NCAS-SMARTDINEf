@@ -68,7 +68,7 @@ export default function LoginPage() {
 
           <div className="form-group">
             <label htmlFor="studentId" className="form-label">
-              Student ID
+              👤 Student ID
             </label>
             <input
               type="text"
@@ -84,7 +84,7 @@ export default function LoginPage() {
 
           <div className="form-group">
             <label htmlFor="dob" className="form-label">
-              Date of Birth
+              📅 Date of Birth
             </label>
             <input
               type="date"

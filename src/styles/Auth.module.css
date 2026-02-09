@@ -1,107 +1,115 @@
-/* Main container simulating the atmospheric background */
+/* Main container with gradient background and floating elements */
 .authContainer {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Light airy background base */
-  background: #f0f2f5;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 2rem 1rem;
   position: relative;
   overflow: hidden;
-  z-index: 0;
 }
 
-/* Creating the floating colorful "blobs" in background */
-.authContainer::before,
+.authContainer::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  top: -250px;
+  right: -250px;
+  animation: float 6s ease-in-out infinite;
+}
+
 .authContainer::after {
   content: '';
   position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  z-index: -1;
-  opacity: 0.8;
-}
-
-/* Top-left blue/cyan blob */
-.authContainer::before {
   width: 400px;
   height: 400px;
-  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-  top: -50px;
-  left: -50px;
-  animation: float 8s ease-in-out infinite alternate;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  bottom: -200px;
+  left: -200px;
+  animation: float 8s ease-in-out infinite reverse;
 }
 
-/* Bottom-right purple/blue blob */
-.authContainer::after {
-  width: 350px;
-  height: 350px;
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  bottom: -50px;
-  right: -50px;
-  animation: float 10s ease-in-out infinite alternate-reverse;
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-20px) translateX(10px);
+  }
 }
 
-/* The Glass Card */
 .authCard {
-  /* Semi-transparent white for frosted effect */
-  background: rgba(255, 255, 255, 0.45);
-  /* The core glassmorphism property */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  /* Light border to define edges */
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-top: 1px solid rgba(255, 255, 255, 0.9);
-  border-left: 1px solid rgba(255, 255, 255, 0.9);
-  /* Large rounded corners like the mobile screens */
-  border-radius: 2.5rem;
-  /* Soft, diffuse shadow */
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   width: 100%;
-  max-width: 420px;
+  max-width: 500px;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.5s ease-out;
 }
 
-.authCard:hover {
-  transform: translateY(-5px);
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Header - Transparent and clean */
+/* Header with gradient background */
 .authHeader {
-  /* Removed solid background to let glass show through */
-  background: transparent;
-  padding: 3rem 2rem 1rem;
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  color: white;
+  padding: 2.5rem 2rem;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.authHeader::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
 }
 
 .authHeader h1 {
   font-size: 2.25rem;
   margin-bottom: 0.5rem;
-  font-weight: 800;
-  color: #2d3748;
-  letter-spacing: -0.5px;
+  position: relative;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .authHeader p {
-  color: #718096;
-  font-size: 1rem;
-  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+  position: relative;
+  font-weight: 400;
 }
 
 .authForm {
-  padding: 1rem 2.5rem 3rem;
+  padding: 2.5rem 2rem;
 }
 
 .authForm h2 {
   margin-bottom: 2rem;
   text-align: center;
-  color: #4a5568;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 /* Footer styling */
@@ -109,8 +117,7 @@
   margin-top: 1.5rem;
   text-align: center;
   padding-top: 1.5rem;
-  /* Semi-transparent border */
-  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .authFooter p {
@@ -119,63 +126,48 @@
 }
 
 .authLink {
-  /* Gradient text for links */
-  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-weight: 700;
+  color: var(--primary-color);
   text-decoration: none;
-  transition: opacity 0.3s;
+  font-weight: 500;
+  transition: color 0.2s ease;
 }
 
 .authLink:hover {
-  opacity: 0.8;
-  text-decoration: none;
+  text-decoration: underline;
+  color: var(--primary-dark);
 }
 
-/* Generic Input styling to match the theme (assumed usage) */
-.authForm input {
-  width: 100%;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1rem;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 1.5rem;
-  color: #2d3748;
-  outline: none;
+/* Enhanced form input styles for auth page */
+.authForm .form-input {
   transition: all 0.3s ease;
 }
 
-.authForm input:focus {
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
-}
-
-/* Generic Button styling to match the "Lorem Ipsum" blue buttons */
-.authForm button {
-  width: 100%;
-  padding: 1rem;
-  border: none;
-  border-radius: 1.5rem;
-  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-  color: white;
-  font-weight: 700;
-  font-size: 1rem;
-  cursor: pointer;
-  box-shadow: 0 10px 20px rgba(0, 114, 255, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.authForm button:hover {
+.authForm .form-input:focus {
   transform: translateY(-2px);
-  box-shadow: 0 15px 25px rgba(0, 114, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
-@keyframes float {
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+.authForm .form-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+}
+
+.authForm button[type="submit"] {
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.authForm button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+.authForm button[type="submit"]:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 @media (max-width: 640px) {
@@ -184,11 +176,14 @@
   }
 
   .authCard {
-    border-radius: 2rem;
-    backdrop-filter: blur(15px);
+    max-width: 100%;
   }
 
   .authHeader h1 {
     font-size: 1.75rem;
+  }
+
+  .authForm {
+    padding: 2rem 1.5rem;
   }
 }
