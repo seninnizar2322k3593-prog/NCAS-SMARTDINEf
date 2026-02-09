@@ -57,15 +57,22 @@ export default function Scanner() {
 
     return () => {
       isMounted = false;
-      if (html5QrCodeRef.current && scannerRunning) {
-        html5QrCodeRef.current
-          .stop()
-          .catch((err) => {
-            console.log('Scanner cleanup error (safe to ignore):', err);
-          });
+      if (html5QrCodeRef.current) {
+        const scanner = html5QrCodeRef.current;
+        // Check if scanner is actually scanning before stopping
+        if (scanner.isScanning) {
+          scanner
+            .stop()
+            .then(() => {
+              setScannerRunning(false);
+            })
+            .catch((err) => {
+              console.log('Scanner cleanup error (safe to ignore):', err);
+            });
+        }
       }
     };
-  }, [scanning, scannerRunning]);
+  }, [scanning]);
 
   const startScanning = () => {
     setScanning(true);
@@ -75,13 +82,17 @@ export default function Scanner() {
   };
 
   const stopScanning = () => {
-    if (html5QrCodeRef.current && scannerRunning) {
-      setScannerRunning(false);
-      setScanning(false);
+    if (html5QrCodeRef.current && html5QrCodeRef.current.isScanning) {
       html5QrCodeRef.current
         .stop()
+        .then(() => {
+          setScannerRunning(false);
+          setScanning(false);
+        })
         .catch((err) => {
           console.log('Stop scanner error (safe to ignore):', err);
+          setScannerRunning(false);
+          setScanning(false);
         });
     } else {
       setScanning(false);

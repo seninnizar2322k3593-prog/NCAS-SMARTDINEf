@@ -25,11 +25,24 @@ export default function MenuPage() {
       const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
       const targetDate = selectedDate === 'today' ? today : tomorrow;
 
-      const { data, error } = await supabase
+      // First, try to get items for the specific date
+      let { data, error } = await supabase
         .from('menu_items')
         .select('*')
         .eq('available_date', targetDate)
         .eq('is_available', true);
+
+      // If no items found for specific date, get all available items
+      if (!error && (!data || data.length === 0)) {
+        const fallback = await supabase
+          .from('menu_items')
+          .select('*')
+          .eq('is_available', true);
+        
+        if (!fallback.error) {
+          data = fallback.data;
+        }
+      }
 
       if (!error) {
         setMenuItems(data || []);
@@ -155,15 +168,6 @@ export default function MenuPage() {
                           <div className={styles.menuCardFooter}>
                             <div className={styles.menuCardPrice}>
                               ₹{item.price}
-                            </div>
-                            <div className={styles.menuCardQuantity}>
-                              {isSoldOut ? (
-                                <span className="text-danger">Out of stock</span>
-                              ) : (
-                                <span className="text-secondary">
-                                  {item.available_quantity} available
-                                </span>
-                              )}
                             </div>
                           </div>
                           {!isSoldOut && (

@@ -72,7 +72,7 @@ export default function RegisterPage() {
       <div className={styles.authCard}>
         <div className={styles.authHeader}>
           <h1>🍽️ NCAS SMART DINE</h1>
-          <p>College Canteen Pre-Order System</p>
+          <p>Your Canteen Made Smarter</p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.authForm}>

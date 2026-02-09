@@ -1,85 +1,194 @@
+/* Main container simulating the atmospheric background */
 .authContainer {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Light airy background base */
+  background: #f0f2f5;
   padding: 2rem 1rem;
-}
-
-.authCard {
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  width: 100%;
-  max-width: 500px;
+  position: relative;
   overflow: hidden;
+  z-index: 0;
 }
 
+/* Creating the floating colorful "blobs" in background */
+.authContainer::before,
+.authContainer::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  z-index: -1;
+  opacity: 0.8;
+}
+
+/* Top-left blue/cyan blob */
+.authContainer::before {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+  top: -50px;
+  left: -50px;
+  animation: float 8s ease-in-out infinite alternate;
+}
+
+/* Bottom-right purple/blue blob */
+.authContainer::after {
+  width: 350px;
+  height: 350px;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  bottom: -50px;
+  right: -50px;
+  animation: float 10s ease-in-out infinite alternate-reverse;
+}
+
+/* The Glass Card */
+.authCard {
+  /* Semi-transparent white for frosted effect */
+  background: rgba(255, 255, 255, 0.45);
+  /* The core glassmorphism property */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  /* Light border to define edges */
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  border-left: 1px solid rgba(255, 255, 255, 0.9);
+  /* Large rounded corners like the mobile screens */
+  border-radius: 2.5rem;
+  /* Soft, diffuse shadow */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.authCard:hover {
+  transform: translateY(-5px);
+}
+
+/* Header - Transparent and clean */
 .authHeader {
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-  color: white;
-  padding: 2rem;
+  /* Removed solid background to let glass show through */
+  background: transparent;
+  padding: 3rem 2rem 1rem;
   text-align: center;
 }
 
 .authHeader h1 {
-  color: white;
-  font-size: 2rem;
+  font-size: 2.25rem;
   margin-bottom: 0.5rem;
+  font-weight: 800;
+  color: #2d3748;
+  letter-spacing: -0.5px;
 }
 
 .authHeader p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 0.9rem;
+  color: #718096;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .authForm {
-  padding: 2rem;
+  padding: 1rem 2.5rem 3rem;
 }
 
 .authForm h2 {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   text-align: center;
-  color: var(--text-primary);
+  color: #4a5568;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
 }
 
+/* Footer styling */
 .authFooter {
   margin-top: 1.5rem;
   text-align: center;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  /* Semi-transparent border */
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .authFooter p {
-  color: var(--text-secondary);
+  color: #718096;
   font-size: 0.875rem;
 }
 
 .authLink {
-  color: var(--primary-color);
+  /* Gradient text for links */
+  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
   text-decoration: none;
-  font-weight: 500;
+  transition: opacity 0.3s;
 }
 
 .authLink:hover {
-  text-decoration: underline;
+  opacity: 0.8;
+  text-decoration: none;
+}
+
+/* Generic Input styling to match the theme (assumed usage) */
+.authForm input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 1.5rem;
+  color: #2d3748;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.authForm input:focus {
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+}
+
+/* Generic Button styling to match the "Lorem Ipsum" blue buttons */
+.authForm button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0, 114, 255, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.authForm button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 25px rgba(0, 114, 255, 0.4);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
 }
 
 @media (max-width: 640px) {
   .authContainer {
-    padding: 1rem 0.5rem;
+    padding: 1rem;
   }
 
   .authCard {
-    max-width: 100%;
+    border-radius: 2rem;
+    backdrop-filter: blur(15px);
   }
 
   .authHeader h1 {
-    font-size: 1.5rem;
-  }
-
-  .authForm {
-    padding: 1.5rem;
+    font-size: 1.75rem;
   }
 }

@@ -41,7 +41,7 @@ export default function Navbar() {
     <nav className={styles.navbar}>
       <div className={styles.navContainer}>
         <Link href={role === 'admin' ? '/admin/dashboard' : '/student/dashboard'} className={styles.navBrand}>
-          <span className={styles.navIcon}>🍽️</span>
+          <span className={styles.navIcon}></span>
           <span>NCAS SMART DINE</span>
         </Link>
 
